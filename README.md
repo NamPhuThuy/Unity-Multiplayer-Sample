@@ -17,3 +17,10 @@ This is a sample project of using Netcode for GameObject to create a multiplayer
 ![](images/multiplayer_2.png)
 ![](images/multiplayer_3.png)
 ![](images/multiplayer_4.png)
+
+## 2: Sync Lobby Data
+
+
+# References
+
+<a href = "https://www.youtube.com/playlist?list=PLxmtWA2eKdQSf2EXE-tv0lmqmmdDzs0fV">Unity Multiplayer tutorial</a> - Carl Boisvert Dev
