@@ -12,7 +12,7 @@ namespace Game.Data
         private string _gamerTag;
         private bool _isReady; //does the player is ready to start the game?
     
-        public string ID
+        public string Id
         {
             get => _id;
             // set => _id = value;

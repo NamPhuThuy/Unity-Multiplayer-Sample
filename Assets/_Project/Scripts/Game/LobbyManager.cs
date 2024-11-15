@@ -2,16 +2,16 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using GameFramework.Core;
 using GameFramework.Events;
 using Unity.Services.Authentication;
 using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace GameFramework.Manager
 {
-    public class LobbyManager : Singleton<LobbyManager>
+    public class LobbyManager : Core.Singleton<LobbyManager>
     {
         private Lobby _lobby;
         private Coroutine _heartBeatCoroutine;
@@ -24,7 +24,7 @@ namespace GameFramework.Manager
         }
 
 
-        public async Task<bool> CreateLobby(int maxPlayers, bool isPrivate, Dictionary<string, string> data)
+        public async Task<bool> CreateLobby(int maxPlayers, bool isPrivate, Dictionary<string, string> data, Dictionary<string, string> lobbyData)
         {
             Dictionary<string, PlayerDataObject> playerData = SerializePlayerData(data);
 
@@ -33,6 +33,7 @@ namespace GameFramework.Manager
 
             CreateLobbyOptions options = new CreateLobbyOptions()
             {
+                Data = SerializeLobbyData(lobbyData),
                 IsPrivate = isPrivate,
                 Player = player
             };
@@ -95,6 +96,20 @@ namespace GameFramework.Manager
             }
 
             return playerData;
+        }
+        
+        private Dictionary<string, DataObject> SerializeLobbyData(Dictionary<string, string> data)
+        {
+            Dictionary<string, DataObject> lobbyData = new Dictionary<string, DataObject>();
+
+            foreach (var (key, value) in data)
+            {
+                lobbyData.Add(key, new DataObject(
+                    visibility: DataObject.VisibilityOptions.Member, //Visible only to member of the lobby
+                    value: value));
+            }
+
+            return lobbyData;
         }
 
         public void OnApplicationQuit()
@@ -163,6 +178,34 @@ namespace GameFramework.Manager
             //Tells everybody that there was a new lobby
             LobbyEvents.OnLobbyUpdated(_lobby);
             return true;
+        }
+
+        public async Task<bool> UpdateLobbyData(Dictionary<string, string> data)
+        {
+            Dictionary<string, DataObject> lobbyData = SerializeLobbyData(data);
+
+            UpdateLobbyOptions options = new UpdateLobbyOptions()
+            {
+                Data = lobbyData
+            };
+
+            try
+            {
+                _lobby = await LobbyService.Instance.UpdateLobbyAsync(_lobby.Id, options);
+            }
+            catch (System.Exception)
+            {
+                return false;
+            }
+
+            //LobbyEvent in the Game Framework
+            LobbyEvents.OnLobbyUpdated(_lobby); 
+            return true;
+        }
+
+        public string GetHostId()
+        {
+            return _lobby.HostId;
         }
     }
 }

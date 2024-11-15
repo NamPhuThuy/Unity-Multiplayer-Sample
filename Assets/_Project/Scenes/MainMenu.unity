@@ -478,6 +478,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5918286044071666587, guid: 910a63297fbfdf540ba5b1a9ede18fb8, type: 3}
+      propertyPath: m_text
+      value: Submit code
+      objectReference: {fileID: 0}
     - target: {fileID: 6683677984443380726, guid: 910a63297fbfdf540ba5b1a9ede18fb8, type: 3}
       propertyPath: m_Name
       value: SubmitCodeButton
