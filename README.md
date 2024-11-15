@@ -3,8 +3,15 @@ This is a sample project of using Netcode for GameObject to create a multiplayer
 
 
 ## 1: Create and Join Lobby
-- Requirement Packages: 
-    - Authentication, Lobby
+- Step 1: Download packages
+  - Authentication, Lobby, Netcode for GameObjects
+
+- Step 2: Connect to **Unity Service**
+  - Log in Unity account 
+  - Create new project on Unity Cloud with name: **Unity-Multiplayer-with-Netcode-for-GameObjects**
+  - Project Settings -> Services -> Link to the **Unity-Multiplayer-with-Netcode-for-GameObjects** project
+
+
 
 ![](images/multiplayer_1.png)
 ![](images/multiplayer_2.png)
