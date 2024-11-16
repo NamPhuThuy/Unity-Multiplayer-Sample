@@ -9,6 +9,7 @@ namespace Game.Data
     public class LobbyData
     {
         private int _mapIndex;
+        private string _relayJoinCode;
 
         public int MapIndex
         {
@@ -33,16 +34,26 @@ namespace Game.Data
             {
                 _mapIndex = Int32.Parse(lobbyData["MapIndex"].Value);
             }
+
+            if (lobbyData.ContainsKey("RelayJoinCode"))
+            {
+                _relayJoinCode = lobbyData["RelayJoinCode"].Value;
+            }
         }
 
         public Dictionary<string, string> Serialize()
         {
             return new Dictionary<string, string>
             {
-                {"MapIndex", _mapIndex.ToString()}
+                {"MapIndex", _mapIndex.ToString()},
+                {"RelayJoinCode", _relayJoinCode}
             };
         }
-        
+
+        public void SetRelayJoinCode(string code)
+        {
+            _relayJoinCode = code;
+        }
     }
     
     

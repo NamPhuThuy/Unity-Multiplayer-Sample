@@ -33,7 +33,7 @@ namespace Game
             {
                 _leftButton.onClick.AddListener(OnLeftButtonClick);
                 _rightButton.onClick.AddListener(OnRightButtonClick);
-
+                _startButton.onClick.AddListener(OnStartButtonClick);
                 Events.LobbyEvents.OnLobbyReady += OnLobbyReady;
             }
             
@@ -51,6 +51,7 @@ namespace Game
             }
             _rightButton.onClick.RemoveAllListeners();
             _leftButton.onClick.RemoveAllListeners();
+            _startButton.onClick.RemoveAllListeners();
             _readyButton.onClick.RemoveAllListeners();
             
             LobbyEvents.OnLobbyUpdated -= OnLobbyUpdated;
@@ -96,6 +97,11 @@ namespace Game
             UpdateMapThumbnail();
             GameLobbyManager.Instance.SetSelectedMap(_currentMapIndex);
         }
+        
+        private async void OnStartButtonClick()
+        {
+            await GameLobbyManager.Instance.StartGame(_mapSelectionData.maps[_currentMapIndex].sceneName);
+        }
 
         private async void OnReadyPressed()
         {
@@ -122,6 +128,9 @@ namespace Game
         private void OnLobbyReady()
         {
             _startButton.gameObject.SetActive(true);
-        } 
+        }
+
+        
+        
     }
 }

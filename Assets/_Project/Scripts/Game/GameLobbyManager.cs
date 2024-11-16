@@ -8,7 +8,9 @@ using Game.Data;
 using GameFramework.Core;
 using GameFramework.Events;
 using GameFramework.Manager;
+using GameFramwork.Manager;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Game
 {
@@ -26,6 +28,8 @@ namespace Game
 
         public bool IsHost => _localLobbyPlayerData.Id == LobbyManager.Instance.GetHostId();
 
+        [Header("Relay")]
+        [SerializeField] private int _maxNumPlayers = 4;
         private void OnEnable()
         {
             LobbyEvents.OnLobbyUpdated += OnLobbyUpdated;
@@ -51,7 +55,7 @@ namespace Game
             _lobbyData = new LobbyData();
             _lobbyData.Initialize(0);
 
-            bool succeeded = await LobbyManager.Instance.CreateLobby(4, true, _localLobbyPlayerData.Serialize(), _lobbyData.Serialize());
+            bool succeeded = await LobbyManager.Instance.CreateLobby(_maxNumPlayers, true, _localLobbyPlayerData.Serialize(), _lobbyData.Serialize());
             return succeeded;
         }
 
@@ -132,6 +136,21 @@ namespace Game
         {
             _lobbyData.MapIndex = currentMapIndex;
             return await LobbyManager.Instance.UpdateLobbyData(_lobbyData.Serialize());
+        }
+
+        public async Task StartGame(string sceneName)
+        {
+            string joinRelayCode = await RelayManager.Instance.CreateRelay(_maxNumPlayers);
+
+            _lobbyData.SetRelayJoinCode(joinRelayCode);
+            await LobbyManager.Instance.UpdateLobbyData(_lobbyData.Serialize());
+
+            string allocationId = RelayManager.Instance.GetAllocationId();
+            string connectionData = RelayManager.Instance.GetConnectionData();
+
+            await LobbyManager.Instance.UpdatePlayerData(_localLobbyPlayerData.Id, _localLobbyPlayerData.Serialize(), allocationId, connectionData);
+
+            SceneManager.LoadSceneAsync(sceneName);
         }
     }
 }
