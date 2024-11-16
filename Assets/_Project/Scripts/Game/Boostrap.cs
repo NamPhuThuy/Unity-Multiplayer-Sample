@@ -12,7 +12,7 @@ namespace Game
 
         async void Start()
         {
-            //Used await to make sure the Unity Services is initialized before anyth
+            //Make sure the Unity Services is initialized before anything
             await UnityServices.InitializeAsync();
 
             if (UnityServices.State == ServicesInitializationState.Initialized)
@@ -24,9 +24,11 @@ namespace Game
                 //Can be sign in with Facebook, Apple, Google, Oculus, Steam,.. or Anonymous             
                 await AuthenticationService.Instance.SignInAnonymouslyAsync();
 
-
-
-
+                /*
+                 If the AuthenticationService is signed in: 
+                 + Initialize player's info
+                 + Start MainMenu
+                */
                 if (AuthenticationService.Instance.IsSignedIn)
                 {
                     string username = PlayerPrefs.GetString("Username", "Player");

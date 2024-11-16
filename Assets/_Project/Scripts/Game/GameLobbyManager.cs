@@ -43,14 +43,11 @@ namespace Game
 
         public async Task<bool> CreateLobby()
         {
-            /*Dictionary<string, string> playerData = new Dictionary<string, string>()
-            {
-                {"GamerTag", "HostPlayer"}
-            };*/
-
+            //Initialize infor of the Host
             _localLobbyPlayerData = new LobbyPlayerData();
             _localLobbyPlayerData.Initialize(AuthenticationService.Instance.PlayerId, "HostPlayer");
             
+            //Initialize infor of the Lobby
             _lobbyData = new LobbyData();
             _lobbyData.Initialize(0);
 

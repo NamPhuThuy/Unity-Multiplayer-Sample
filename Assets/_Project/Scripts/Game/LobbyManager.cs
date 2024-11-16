@@ -13,6 +13,9 @@ namespace GameFramework.Manager
 {
     public class LobbyManager : Core.Singleton<LobbyManager>
     {
+        /// <summary>
+        /// The current Lobby
+        /// </summary>
         private Lobby _lobby;
         private Coroutine _heartBeatCoroutine;
         private Coroutine _refreshLobbyCoroutine;
@@ -27,10 +30,11 @@ namespace GameFramework.Manager
         public async Task<bool> CreateLobby(int maxPlayers, bool isPrivate, Dictionary<string, string> data, Dictionary<string, string> lobbyData)
         {
             Dictionary<string, PlayerDataObject> playerData = SerializePlayerData(data);
-
+            
+            //Create a new player with the given data
             Player player = new Player(AuthenticationService.Instance.PlayerId, null, playerData);
-
-
+            
+            //Optional parameter class for Lobby creation requests
             CreateLobbyOptions options = new CreateLobbyOptions()
             {
                 Data = SerializeLobbyData(lobbyData),
@@ -40,6 +44,7 @@ namespace GameFramework.Manager
 
             try
             {
+                //Create the lobby
                 _lobby = await LobbyService.Instance.CreateLobbyAsync("Lobby", maxPlayers, options);
             }
             catch (Exception)
@@ -69,6 +74,7 @@ namespace GameFramework.Manager
         {
             while (true)
             {
+                //Retrieve information about a specific lobby identified by lobbyId
                 Task<Lobby> task = LobbyService.Instance.GetLobbyAsync(lobbyId);
                 yield return new WaitUntil(() => task.IsCompleted); //wait until the task (refresh Lobby) is complete
 
@@ -124,7 +130,6 @@ namespace GameFramework.Manager
 
         public async Task<bool> JoinLobby(string code, Dictionary<string, string> playerData)
         {
-
             JoinLobbyByCodeOptions options = new JoinLobbyByCodeOptions();
             Player player = new Player(AuthenticationService.Instance.PlayerId, null, SerializePlayerData(playerData));
 

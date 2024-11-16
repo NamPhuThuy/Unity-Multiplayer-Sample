@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+//Control the UI flow of the MainMenu
 namespace Game
 {
     public class MainMenuController : MonoBehaviour
@@ -36,7 +37,6 @@ namespace Game
 
         private async void OnHostClicked()
         {
-            Debug.Log("Hos clicked");
             bool succeeded = await GameLobbyManager.Instance.CreateLobby();
 
             //If lobby is created successfully => send the player to the lobby-scene
