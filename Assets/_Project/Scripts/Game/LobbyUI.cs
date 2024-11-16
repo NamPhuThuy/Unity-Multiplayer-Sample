@@ -80,7 +80,7 @@ namespace Game
             }
 
             UpdateMapThumbnail();
-            GameLobbyManager.Instance.SetSelectedMap(_currentMapIndex);
+            GameLobbyManager.Instance.SetSelectedMap(_currentMapIndex, _mapSelectionData.maps[_currentMapIndex].sceneName);
         }
 
         private async void OnRightButtonClick()
@@ -95,12 +95,12 @@ namespace Game
             }
 
             UpdateMapThumbnail();
-            GameLobbyManager.Instance.SetSelectedMap(_currentMapIndex);
+            GameLobbyManager.Instance.SetSelectedMap(_currentMapIndex, _mapSelectionData.maps[_currentMapIndex].sceneName);
         }
         
         private async void OnStartButtonClick()
         {
-            await GameLobbyManager.Instance.StartGame(_mapSelectionData.maps[_currentMapIndex].sceneName);
+            await GameLobbyManager.Instance.StartGame();
         }
 
         private async void OnReadyPressed()

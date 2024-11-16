@@ -73,7 +73,7 @@ namespace Game
             return succeeded;
         }
 
-        private void OnLobbyUpdated(Lobby lobby)
+        private async void OnLobbyUpdated(Lobby lobby)
         {
             //Ask Lobby Manager to give us the data of the player we want 
             List<Dictionary<string, PlayerDataObject>> playerData = LobbyManager.Instance.GetPlayerData();
@@ -113,6 +113,15 @@ namespace Game
             {
                 Events.LobbyEvents.OnLobbyReady?.Invoke();
             }
+
+            if (_lobbyData.RelayJoinCode != default)
+            {
+                //Join the Relay
+                await JoinRelayServer(_lobbyData.RelayJoinCode);
+                
+                Debug.Log($"Scene name: {_lobbyData.SceneName}");
+                SceneManager.LoadSceneAsync(_lobbyData.SceneName);
+            }
         }
 
         public List<LobbyPlayerData> GetPlayers()
@@ -132,25 +141,41 @@ namespace Game
             return _lobbyData.MapIndex;
         }
 
-        public async Task<bool> SetSelectedMap(int currentMapIndex)
+        public async Task<bool> SetSelectedMap(int currentMapIndex, string sceneName)
         {
             _lobbyData.MapIndex = currentMapIndex;
+            _lobbyData.SceneName = sceneName;
             return await LobbyManager.Instance.UpdateLobbyData(_lobbyData.Serialize());
         }
 
-        public async Task StartGame(string sceneName)
+        public async Task StartGame()
         {
-            string joinRelayCode = await RelayManager.Instance.CreateRelay(_maxNumPlayers);
-
-            _lobbyData.SetRelayJoinCode(joinRelayCode);
+            //Retrieve the unique join code of Relay connection
+            string relayJoinCode = await RelayManager.Instance.CreateRelay(_maxNumPlayers);
+            _lobbyData.RelayJoinCode = relayJoinCode;
+            
+            //Update the lobbyData
             await LobbyManager.Instance.UpdateLobbyData(_lobbyData.Serialize());
 
+            //Retrieve the allocationId and connectionData
             string allocationId = RelayManager.Instance.GetAllocationId();
             string connectionData = RelayManager.Instance.GetConnectionData();
-
+            
+            //Update player data
             await LobbyManager.Instance.UpdatePlayerData(_localLobbyPlayerData.Id, _localLobbyPlayerData.Serialize(), allocationId, connectionData);
 
-            SceneManager.LoadSceneAsync(sceneName);
+            SceneManager.LoadSceneAsync(_lobbyData.SceneName);
+        }
+        
+        private async Task<bool> JoinRelayServer(string relayJoinCode)
+        {
+            await RelayManager.Instance.JoinRelay(relayJoinCode);
+            
+            string allocationId = RelayManager.Instance.GetAllocationId();
+            string connectionData = RelayManager.Instance.GetConnectionData();
+            await LobbyManager.Instance.UpdatePlayerData(_localLobbyPlayerData.Id, _localLobbyPlayerData.Serialize(), allocationId, connectionData);
+            
+            return true;
         }
     }
 }
