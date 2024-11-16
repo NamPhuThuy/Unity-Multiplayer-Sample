@@ -25,8 +25,9 @@ namespace Game
 
         [Header("Map Selection")] 
         private LobbyData _lobbyData;
-
+        
         public bool IsHost => _localLobbyPlayerData.Id == LobbyManager.Instance.GetHostId();
+        
 
         [Header("Relay")]
         [SerializeField] private int _maxNumPlayers = 4;
@@ -53,7 +54,7 @@ namespace Game
             
             //Initialize infor of the Lobby
             _lobbyData = new LobbyData();
-            _lobbyData.Initialize(0, "CyanScene");
+            _lobbyData.Initialize(0);
 
             bool succeeded = await LobbyManager.Instance.CreateLobby(_maxNumPlayers, true, _localLobbyPlayerData.Serialize(), _lobbyData.Serialize());
             return succeeded;

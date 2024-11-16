@@ -4,7 +4,7 @@ This is a sample project of using Netcode for GameObject to create a multiplayer
 
 ## 1: Create and Join Lobby
 - Step 1: Download packages
-  - Authentication, Lobby, Netcode for GameObjects
+  - Authentication, Lobby, 
 
 - Step 2: Connect to **Unity Service**
   - Log in Unity account 
@@ -47,6 +47,9 @@ Ta cũng sẽ cần triển khai Coroutine để gửi đi yêu cầu cập nh�
 
 ## 3: Connect players using Relay Service
 - Step 1: Download Relay package
+
+## 4: Unity Netcode for Gameobjects
+- Step 1: Download package **Netcode for GameObjects**
 
 # References
 

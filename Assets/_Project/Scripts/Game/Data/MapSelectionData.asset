@@ -19,9 +19,12 @@ MonoBehaviour:
   - mapThumbnail: {r: 0, g: 1, b: 0, a: 1}
     mapName: Green
     sceneName: GreenScene
-  - mapThumbnail: {r: 1, g: 0.5564344, b: 0, a: 1}
+  - mapThumbnail: {r: 0.9924528, g: 0.6580443, b: 0.23781411, a: 1}
     mapName: Orange
     sceneName: OrangeScene
-  - mapThumbnail: {r: 1, g: 0, b: 1, a: 1}
+  - mapThumbnail: {r: 0.94716984, g: 0.23411177, b: 0.94716984, a: 1}
     mapName: Purple
     sceneName: PurpleScene
+  - mapThumbnail: {r: 0.98490566, g: 0.30290487, b: 0.32198164, a: 1}
+    mapName: Red
+    sceneName: RedScene

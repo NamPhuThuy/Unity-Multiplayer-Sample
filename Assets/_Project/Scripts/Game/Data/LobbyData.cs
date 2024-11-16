@@ -30,10 +30,9 @@ namespace Game.Data
             set => _sceneName = value;
         }
 
-        public void Initialize(int mapIndex, string sceneName)
+        public void Initialize(int mapIndex)
         {
             _mapIndex = mapIndex;
-            _sceneName = sceneName;
         }
 
         public void Initialize(Dictionary<string, DataObject> lobbyData)
