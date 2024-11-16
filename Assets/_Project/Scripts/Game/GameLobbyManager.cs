@@ -75,15 +75,22 @@ namespace Game
             List<Dictionary<string, PlayerDataObject>> playerData = LobbyManager.Instance.GetPlayerData();
             _lobbyPlayerDatas.Clear();
 
+            int numOfPlayerReady = 0;
+            
+            //Loop through all players in current Lobby
             foreach (Dictionary<string, PlayerDataObject> data in playerData)
             {
                 LobbyPlayerData lobbyPlayerData = new LobbyPlayerData();
                 lobbyPlayerData.Initialize(data);
 
+                if (lobbyPlayerData.IsReady)
+                {
+                    numOfPlayerReady++;
+                }
+                
                 if (lobbyPlayerData.Id == AuthenticationService.Instance.PlayerId)
                 {
                     _localLobbyPlayerData = lobbyPlayerData;
-
                 }
 
                 _lobbyPlayerDatas.Add(lobbyPlayerData);
@@ -96,6 +103,12 @@ namespace Game
             //Check if is anyone is subcribe?  
             //Used to spawn players that have been subcribed to this event
             Events.LobbyEvents.OnLobbyUpdated?.Invoke();
+
+            //If everyone is ready
+            if (numOfPlayerReady == lobby.Players.Count)
+            {
+                Events.LobbyEvents.OnLobbyReady?.Invoke();
+            }
         }
 
         public List<LobbyPlayerData> GetPlayers()

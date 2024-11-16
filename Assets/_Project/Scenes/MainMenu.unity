@@ -219,6 +219,14 @@ PrefabInstance:
       propertyPath: m_text
       value: Join
       objectReference: {fileID: 0}
+    - target: {fileID: 5918286044071666587, guid: 910a63297fbfdf540ba5b1a9ede18fb8, type: 3}
+      propertyPath: m_fontSize
+      value: 32
+      objectReference: {fileID: 0}
+    - target: {fileID: 5918286044071666587, guid: 910a63297fbfdf540ba5b1a9ede18fb8, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 32
+      objectReference: {fileID: 0}
     - target: {fileID: 6683677984443380726, guid: 910a63297fbfdf540ba5b1a9ede18fb8, type: 3}
       propertyPath: m_Name
       value: JoinButton
@@ -1246,6 +1254,14 @@ PrefabInstance:
       value: 'Host
 
 '
+      objectReference: {fileID: 0}
+    - target: {fileID: 5918286044071666587, guid: 910a63297fbfdf540ba5b1a9ede18fb8, type: 3}
+      propertyPath: m_fontSize
+      value: 32
+      objectReference: {fileID: 0}
+    - target: {fileID: 5918286044071666587, guid: 910a63297fbfdf540ba5b1a9ede18fb8, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 32
       objectReference: {fileID: 0}
     - target: {fileID: 6683677984443380726, guid: 910a63297fbfdf540ba5b1a9ede18fb8, type: 3}
       propertyPath: m_Name

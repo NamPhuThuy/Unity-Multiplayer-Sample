@@ -45,6 +45,8 @@ Ta cũng sẽ cần triển khai Coroutine để gửi đi yêu cầu cập nh�
 
 ## 2: Sync Lobby Data
 
+## 3: Connect players using Relay Service
+- Step 1: Download Relay package
 
 # References
 

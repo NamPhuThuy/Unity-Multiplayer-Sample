@@ -16,6 +16,7 @@ namespace Game
         
         [Header("Ready Indicator")]
         [SerializeField] private Button _readyButton;
+        [SerializeField] private Button _startButton;
         
         [Header("Map Selection")]
         [SerializeField] private Image _mapImage;
@@ -32,6 +33,8 @@ namespace Game
             {
                 _leftButton.onClick.AddListener(OnLeftButtonClick);
                 _rightButton.onClick.AddListener(OnRightButtonClick);
+
+                Events.LobbyEvents.OnLobbyReady += OnLobbyReady;
             }
             
             _readyButton.onClick.AddListener(OnReadyPressed);
@@ -41,15 +44,17 @@ namespace Game
 
         private void OnDisable()
         {
+            //
             if (GameLobbyManager.Instance.IsHost)
             {
-                _rightButton.onClick.RemoveAllListeners();
-                _leftButton.onClick.RemoveAllListeners();
+                
             }
-            
+            _rightButton.onClick.RemoveAllListeners();
+            _leftButton.onClick.RemoveAllListeners();
             _readyButton.onClick.RemoveAllListeners();
             
             LobbyEvents.OnLobbyUpdated -= OnLobbyUpdated;
+            Events.LobbyEvents.OnLobbyReady -= OnLobbyReady;
         }
 
         void Start()
@@ -113,5 +118,10 @@ namespace Game
             _currentMapIndex = GameLobbyManager.Instance.GetMapIndex();
             UpdateMapThumbnail();
         }
+        
+        private void OnLobbyReady()
+        {
+            _startButton.gameObject.SetActive(true);
+        } 
     }
 }
