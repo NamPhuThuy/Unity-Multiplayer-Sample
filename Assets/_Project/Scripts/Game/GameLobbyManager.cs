@@ -53,7 +53,7 @@ namespace Game
             
             //Initialize infor of the Lobby
             _lobbyData = new LobbyData();
-            _lobbyData.Initialize(0);
+            _lobbyData.Initialize(0, "CyanScene");
 
             bool succeeded = await LobbyManager.Instance.CreateLobby(_maxNumPlayers, true, _localLobbyPlayerData.Serialize(), _lobbyData.Serialize());
             return succeeded;
