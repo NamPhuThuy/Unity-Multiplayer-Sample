@@ -23,7 +23,7 @@ namespace Game
             _mainCamera = Camera.main;
             _canvas.worldCamera = _mainCamera;
             _isReadyIndicator.color = Color.red;
-            _playerName.text = _data.GamerTag;
+            // _playerName.text = _data.GamerTag;
         }
 
         private void OnEnable()
