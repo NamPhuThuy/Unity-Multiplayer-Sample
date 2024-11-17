@@ -203,7 +203,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.85660374, g: 0.39920962, b: 0.50165933, a: 1}
+  m_BackGroundColor: {r: 0.7509433, g: 0.40097535, b: 0.4084765, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -307,7 +307,7 @@ MonoBehaviour:
   NetworkConfig:
     ProtocolVersion: 0
     NetworkTransport: {fileID: 1551190538}
-    PlayerPrefab: {fileID: 4811652257133992228, guid: ec16e0f5884dbe0429e6b513d9465fc2, type: 3}
+    PlayerPrefab: {fileID: 8747433700615017990, guid: c43f065f4ed5a6e4790a00d92b0a6d1a, type: 3}
     Prefabs:
       NetworkPrefabsLists:
       - {fileID: 11400000, guid: fc9d2c1e9d8dc374290b0178295f198e, type: 2}

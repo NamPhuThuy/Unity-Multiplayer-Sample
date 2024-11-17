@@ -22,8 +22,13 @@ namespace Game
             // _propertyBlock = new MaterialPropertyBlock();
             _mainCamera = Camera.main;
             _canvas.worldCamera = _mainCamera;
-            
+            _isReadyIndicator.color = Color.red;
             _playerName.text = _data.GamerTag;
+        }
+
+        private void OnEnable()
+        {
+            // SetData();
         }
 
         /// <summary>
@@ -43,7 +48,7 @@ namespace Game
                     _propertyBlock.SetColor("_BaseColor", Color.green);
                     _isReadyIndicator.SetPropertyBlock(_propertyBlock);*/
                     _isReadyIndicator.gameObject.SetActive(true);
-                    _isReadyIndicator.color = Color.white;
+                    _isReadyIndicator.color = Color.green;
                 }
             }
             
