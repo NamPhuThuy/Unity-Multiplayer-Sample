@@ -580,7 +580,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _speed: 10
   _turnSpeed: 10
-  _minMaxRotationX: {x: -90, y: 90}
+  _minMaxRotationX: {x: 90, y: -90}
   _camTransform: {fileID: 3285968718438749701}
 --- !u!114 &6402229955267103528
 MonoBehaviour:

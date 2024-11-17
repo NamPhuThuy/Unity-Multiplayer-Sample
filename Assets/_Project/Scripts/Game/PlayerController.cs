@@ -22,7 +22,7 @@ public class PlayerController : NetworkBehaviour
     {
         _speed = 10f;
         _turnSpeed = 10f;
-        _minMaxRotationX = new Vector2(-90f, 90f);
+        _minMaxRotationX = new Vector2(90f, -90f);
     }
 
     public override void OnNetworkSpawn()
@@ -65,6 +65,7 @@ public class PlayerController : NetworkBehaviour
                 Vector2 movementInput = _playerControl.Player.Move.ReadValue<Vector2>();
                 Vector3 movement = movementInput.x * _camTransform.right + movementInput.y * _camTransform.forward;
 
+                //Make sure the player does not move up and down (only in OXZ plane)
                 movement.y = 0;
 
                 _cc.Move(movement * (_speed * Time.deltaTime));
