@@ -27,6 +27,9 @@ EditorBuildSettings:
     path: Assets/_Project/Scenes/Maps/GreenScene.unity
     guid: 6e3d06d635506a74f923e6ab772f81e4
   - enabled: 1
+    path: Assets/_Project/Scenes/Maps/RedScene.unity
+    guid: 6c289155fb5170648ae30b79fd9970b0
+  - enabled: 1
     path: Assets/_Project/Scenes/Maps/OrangeScene.unity
     guid: b6ab84487a193ed4ea53ce27132682bd
   - enabled: 1
