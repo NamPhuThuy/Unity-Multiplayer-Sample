@@ -49,7 +49,8 @@ Ta cũng sẽ cần triển khai Coroutine để gửi đi yêu cầu cập nh�
 - Step 1: Download Relay package
 
 ## 4: Unity Netcode for Gameobjects
-- Step 1: Download package **Netcode for GameObjects**, **Multiplayer Tools**
+- Step 1: Download packages: **Netcode for GameObjects**, **Multiplayer Tools**
+- Step 2: Download some more packages: **Cinemachine**, **Input System**
 
 # References
 
