@@ -52,6 +52,12 @@ Ta cũng sẽ cần triển khai Coroutine để gửi đi yêu cầu cập nh�
 - Step 1: Download packages: **Netcode for GameObjects**, **Multiplayer Tools**
 - Step 2: Download some more packages: **Cinemachine**, **Input System**
 
+- NetworkTransform component is server authoritative: only changes made on the server will be replicated to the clients
+## 5: Player movement with ServerRPC
+- Remote Procedure Call (RPC) is a powerful technique for constructing distributed, client-server based applications. It is based on extending the conventional local procedure calling so that the called procedure need not exist in the same address space as the calling procedure. The two processes may be on the same system, or they may be on different systems with a network connecting them.
+
+### 5.1 Client Prediction
+
 # References
 
 <a href = "https://www.youtube.com/playlist?list=PLxmtWA2eKdQSf2EXE-tv0lmqmmdDzs0fV">Unity Multiplayer tutorial</a> - Carl Boisvert Dev

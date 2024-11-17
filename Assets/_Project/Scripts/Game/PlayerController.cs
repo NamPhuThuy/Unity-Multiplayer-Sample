@@ -58,40 +58,79 @@ public class PlayerController : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
+        //--Read input
+        Vector2 movementInput = _playerControl.Player.Move.ReadValue<Vector2>();
+        Vector2 lookInput = _playerControl.Player.Look.ReadValue<Vector2>();
+        
         if (IsLocalPlayer)
         {
-            if (_playerControl.Player.Move.inProgress)
+            if (IsServer)
             {
-                Vector2 movementInput = _playerControl.Player.Move.ReadValue<Vector2>();
-                Vector3 movement = movementInput.x * _camTransform.right + movementInput.y * _camTransform.forward;
-
-                //Make sure the player does not move up and down (only in OXZ plane)
-                movement.y = 0;
-
-                _cc.Move(movement * (_speed * Time.deltaTime));
+                /*
+                 (IsServer && IsLocalPlayer) is true if: 
+                - The game is using a host-client networking model (not a dedicated server).
+                - The script is running on the host client (which is also acting as the server).
+                - The script is attached to the game object representing the host player.
+                */
+                
+                Move(movementInput);
+                RotatePlayer(lookInput);
+                RotateCamera(lookInput);
             }
-
-            if (_playerControl.Player.Look.inProgress)
+            else
             {
-                Vector2 lookInput = _playerControl.Player.Look.ReadValue<Vector2>();
-                transform.RotateAround(transform.position, transform.up, lookInput.x * _turnSpeed * Time.deltaTime);
+                RotateCamera(lookInput);
+                MoveServerRPC(movementInput, lookInput);
+            
+                //With below code: client cannot move or rotate by themselves
+                /*if (_playerControl.Player.Move.inProgress)
+                {
+                    Move(movementInput);
+                }
 
-                RotateCamera(lookInput.y);
+                if (_playerControl.Player.Look.inProgress)
+                {
+                    RotatePlayer(lookInput);
+                }*/
             }
         }
-        
     }
 
-    private void RotateCamera(float lookInputY)
+    
+
+    private void Move(Vector2 movementInput)
+    {
+        Vector3 movement = movementInput.x * _camTransform.right + movementInput.y * _camTransform.forward;
+
+        //Make sure the player does not move up and down (only in OXZ plane)
+        movement.y = 0;
+
+        _cc.Move(movement * (_speed * Time.deltaTime));
+    }
+    
+    private void RotatePlayer(Vector2 lookInput)
+    {
+        transform.RotateAround(transform.position, transform.up, lookInput.x * _turnSpeed * Time.deltaTime);
+    }
+
+    private void RotateCamera(Vector2 lookInput)
     {
         _cameraAngle = Vector3.SignedAngle(transform.forward, _camTransform.forward, _camTransform.right);
 
-        float cameraRotationAmount = lookInputY * _turnSpeed * Time.deltaTime;
+        float cameraRotationAmount = lookInput.y * _turnSpeed * Time.deltaTime;
         float newCameraAngle = _cameraAngle - cameraRotationAmount;
 
         if (newCameraAngle <= _minMaxRotationX.x && newCameraAngle >= _minMaxRotationX.y)
         {
-            _camTransform.RotateAround(_camTransform.position, _camTransform.right, -lookInputY * _turnSpeed * Time.deltaTime);
+            _camTransform.RotateAround(_camTransform.position, _camTransform.right, -lookInput.y * _turnSpeed * Time.deltaTime);
         }
+    }
+
+    //This function is called on the client-side but is executed on the server-side
+    [ServerRpc]
+    private void MoveServerRPC(Vector2 movementInput, Vector2 lookInput)
+    {
+        Move(movementInput);
+        RotatePlayer(lookInput);
     }
 }
