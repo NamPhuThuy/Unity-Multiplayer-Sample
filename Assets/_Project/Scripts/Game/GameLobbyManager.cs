@@ -31,6 +31,12 @@ namespace Game
 
         [Header("Relay")]
         [SerializeField] private int _maxNumPlayers = 4;
+        
+        /// <summary>
+        /// Determine this player is in the Game or not
+        /// </summary>
+        [Header("Not Classified")]
+        private bool _inGame = false;
         private void OnEnable()
         {
             LobbyEvents.OnLobbyUpdated += OnLobbyUpdated;
@@ -76,6 +82,8 @@ namespace Game
 
         private async void OnLobbyUpdated(Lobby lobby)
         {
+            Debug.Log($"TNam - GameLobbyManager.OnLobbyUpdated() is called");
+            
             //Ask Lobby Manager to give us the data of the player we want 
             List<Dictionary<string, PlayerDataObject>> playerData = LobbyManager.Instance.GetPlayerData();
             _lobbyPlayerDatas.Clear();
@@ -115,7 +123,7 @@ namespace Game
                 Events.LobbyEvents.OnLobbyReady?.Invoke();
             }
 
-            if (_lobbyData.RelayJoinCode != default)
+            if (_lobbyData.RelayJoinCode != default && !_inGame)
             {
                 //Join the Relay
                 await JoinRelayServer(_lobbyData.RelayJoinCode);
@@ -153,6 +161,7 @@ namespace Game
         {
             //Retrieve the unique join code of Relay connection
             string relayJoinCode = await RelayManager.Instance.CreateRelay(_maxNumPlayers);
+            _inGame = true; 
             _lobbyData.RelayJoinCode = relayJoinCode;
             
             //Update the lobbyData
@@ -170,6 +179,7 @@ namespace Game
         
         private async Task<bool> JoinRelayServer(string relayJoinCode)
         {
+            _inGame = true;
             await RelayManager.Instance.JoinRelay(relayJoinCode);
             
             string allocationId = RelayManager.Instance.GetAllocationId();
