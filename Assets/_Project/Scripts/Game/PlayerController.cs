@@ -3,27 +3,22 @@ using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
 using Game;
+using GameFramework.Network.Component;
 using Unity.Netcode;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : NetworkBehaviour
 {
-    [SerializeField] private float _speed = 10f;
-    [SerializeField] private float _turnSpeed = 10f;
-    [SerializeField] private Vector2 _minMaxRotationX;
+    /*[SerializeField] private float _speed;
+    [SerializeField] private float _turnSpeed;*/
+    [SerializeField] private Vector2 _minMaxRotationX = new Vector2(90f, -90f);
     [SerializeField] private Transform _camTransform;
+    [SerializeField] private NetworkMovementComponent _playerMovement;
 
     private CharacterController _cc;
     private PlayerControl _playerControl;
     private float _cameraAngle;
-
-    private void Reset()
-    {
-        _speed = 10f;
-        _turnSpeed = 10f;
-        _minMaxRotationX = new Vector2(90f, -90f);
-    }
 
     public override void OnNetworkSpawn()
     {
@@ -62,7 +57,7 @@ public class PlayerController : NetworkBehaviour
         Vector2 movementInput = _playerControl.Player.Move.ReadValue<Vector2>();
         Vector2 lookInput = _playerControl.Player.Look.ReadValue<Vector2>();
         
-        if (IsLocalPlayer)
+        /*if (IsLocalPlayer)
         {
             if (IsServer)
             {
@@ -71,7 +66,7 @@ public class PlayerController : NetworkBehaviour
                 - The game is using a host-client networking model (not a dedicated server).
                 - The script is running on the host client (which is also acting as the server).
                 - The script is attached to the game object representing the host player.
-                */
+                #1#
                 
                 Move(movementInput);
                 RotatePlayer(lookInput);
@@ -80,25 +75,23 @@ public class PlayerController : NetworkBehaviour
             else
             {
                 RotateCamera(lookInput);
-                MoveServerRPC(movementInput, lookInput);
-            
-                //With below code: client cannot move or rotate by themselves
-                /*if (_playerControl.Player.Move.inProgress)
-                {
-                    Move(movementInput);
-                }
-
-                if (_playerControl.Player.Look.inProgress)
-                {
-                    RotatePlayer(lookInput);
-                }*/
+                MoveServerRpc(movementInput, lookInput);
             }
+        }*/
+
+        if (IsClient && IsLocalPlayer)
+        {
+            _playerMovement.ProcessLocalPlayerMovement(movementInput, lookInput);
+        }
+        else
+        {
+            _playerMovement.ProcessSimulatedPlayerMovement();
         }
     }
 
     
 
-    private void Move(Vector2 movementInput)
+    /*private void Move(Vector2 movementInput)
     {
         Vector3 movement = movementInput.x * _camTransform.right + movementInput.y * _camTransform.forward;
 
@@ -111,9 +104,9 @@ public class PlayerController : NetworkBehaviour
     private void RotatePlayer(Vector2 lookInput)
     {
         transform.RotateAround(transform.position, transform.up, lookInput.x * _turnSpeed * Time.deltaTime);
-    }
+    }*/
 
-    private void RotateCamera(Vector2 lookInput)
+    /*private void RotateCamera(Vector2 lookInput)
     {
         _cameraAngle = Vector3.SignedAngle(transform.forward, _camTransform.forward, _camTransform.right);
 
@@ -124,13 +117,13 @@ public class PlayerController : NetworkBehaviour
         {
             _camTransform.RotateAround(_camTransform.position, _camTransform.right, -lookInput.y * _turnSpeed * Time.deltaTime);
         }
-    }
+    }*/
 
     //This function is called on the client-side but is executed on the server-side
-    [ServerRpc]
-    private void MoveServerRPC(Vector2 movementInput, Vector2 lookInput)
+    /*[ServerRpc]
+    private void MoveServerRpc(Vector2 movementInput, Vector2 lookInput)
     {
         Move(movementInput);
         RotatePlayer(lookInput);
-    }
+    }*/
 }

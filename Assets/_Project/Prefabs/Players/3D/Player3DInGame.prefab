@@ -507,7 +507,7 @@ PrefabInstance:
       addedObject: {fileID: 1911829102956010964}
     - targetCorrespondingSourceObject: {fileID: 7971219663199388241, guid: 4bac1ff0769bbf2429d17e4d664a881f, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 6402229955267103528}
+      addedObject: {fileID: 4499779557256741980}
   m_SourcePrefab: {fileID: 100100000, guid: 4bac1ff0769bbf2429d17e4d664a881f, type: 3}
 --- !u!4 &4544477101985238385 stripped
 Transform:
@@ -578,11 +578,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 405a9540384b3e84a8a956c33725227b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 10
-  _turnSpeed: 10
   _minMaxRotationX: {x: 90, y: -90}
   _camTransform: {fileID: 3285968718438749701}
---- !u!114 &6402229955267103528
+  _playerMovement: {fileID: 4499779557256741980}
+--- !u!114 &4499779557256741980
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -591,25 +590,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 8747433700615017990}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
+  m_Script: {fileID: 11500000, guid: 373cba4709a74d829c0f00583c236133, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UseUnreliableDeltas: 0
-  SyncPositionX: 1
-  SyncPositionY: 1
-  SyncPositionZ: 1
-  SyncRotAngleX: 1
-  SyncRotAngleY: 1
-  SyncRotAngleZ: 1
-  SyncScaleX: 0
-  SyncScaleY: 0
-  SyncScaleZ: 0
-  PositionThreshold: 0.001
-  RotAngleThreshold: 0.01
-  ScaleThreshold: 0.01
-  UseQuaternionSynchronization: 0
-  UseQuaternionCompression: 0
-  UseHalfFloatPrecision: 0
-  InLocalSpace: 0
-  Interpolate: 1
-  SlerpPosition: 0
+  _cc: {fileID: 8121464182026242047}
+  _speed: 10
+  _turnSpeed: 10
+  _camSocket: {fileID: 1718340380998432558}
+  _vcam: {fileID: 8310371892335750213}
