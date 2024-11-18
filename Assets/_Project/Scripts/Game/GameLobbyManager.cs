@@ -82,8 +82,6 @@ namespace Game
 
         private async void OnLobbyUpdated(Lobby lobby)
         {
-            Debug.Log($"TNam - GameLobbyManager.OnLobbyUpdated() is called");
-            
             //Ask Lobby Manager to give us the data of the player we want 
             List<Dictionary<string, PlayerDataObject>> playerData = LobbyManager.Instance.GetPlayerData();
             _lobbyPlayerDatas.Clear();

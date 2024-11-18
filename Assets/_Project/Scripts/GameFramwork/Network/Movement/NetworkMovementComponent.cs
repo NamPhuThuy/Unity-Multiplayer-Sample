@@ -3,7 +3,7 @@ using Unity.Netcode;
 using UnityEditor;
 using UnityEngine;
 
-namespace GameFramework.Network.Component
+namespace GameFramework.Network.Movement
 {
     /// <summary>
     /// This class is used to implement Client prediction technique
@@ -24,7 +24,7 @@ namespace GameFramework.Network.Component
         /// a "tick" refers to a single iteration or step of the game's main loop on the server. It's the fundamental unit of time in which the game's state is updated and simulated. Think of it as a single frame, but specifically on the server side, responsible for managing the game's logic and consistency across all clients.
         /// </summary>
         private int _tick = 0;
-        private float _tickRate = 1f / 60;
+        private float _tickRate = 1f / 60f;
         private float _tickDeltaTime = 0f; //how much time elapsed since the last tick
 
         private const int BUFFER_SIZE = 1024; //size of a buffer used for network communication
@@ -34,8 +34,8 @@ namespace GameFramework.Network.Component
 
         //The latest value of TransfromState that the Server manage (the latest transform on the Server)
         public NetworkVariable<TransformState> ServerTransformState = new NetworkVariable<TransformState>();
-        public TransformState _previousTransformState;
-
+        public TransformState PreviousTransformState = new TransformState();
+        
         private void OnEnable()
         {
             //Listen to the variable-change
@@ -50,9 +50,19 @@ namespace GameFramework.Network.Component
 
         private void OnServerStateChanged(TransformState previousvalue, TransformState newvalue)
         {
-            _previousTransformState = previousvalue;
+            PreviousTransformState = previousvalue;
         }
 
+        /// <summary>
+        ///Purpose: Manages the movement of the local player (the player controlled directly by the client running this code). <br /> <br/>
+        /// Functionality: <br/>
+        /// - Client-side prediction: moves the player locally<br/>
+        /// - Server authority: sends the input to the server via an RPC. The server then authoritatively updates the player's position<br/>
+        /// - Client-side buffering: It stores "input" and "resulting transform states" in local buffers (_inputStates, _transformStates), allows for client-side reconciliation in case of lag or packet loss. This is crucial for smooth gameplay. <br/>
+        /// - Server-side handling (if host): If the client is also the server (host mode), it directly updates the player's position and server-side state. <br/> 
+        /// </summary>
+        /// <param name="movementInput"></param>
+        /// <param name="lookInput"></param>
         public void ProcessLocalPlayerMovement(Vector2 movementInput, Vector2 lookInput)
         {
             _tickDeltaTime += Time.deltaTime;
@@ -65,8 +75,6 @@ namespace GameFramework.Network.Component
                  !IsServer (not IsServer) is true on all clients except the host in a host-client setup.
                   
                 - In a dedicated server setup, they are functionally equivalent.*/
-
-
                 if (!IsServer)
                 {
                     //Send to the server the information of how we move 
@@ -89,7 +97,7 @@ namespace GameFramework.Network.Component
                         HasStartedMoving = true
                     };
 
-                    _previousTransformState = ServerTransformState.Value;
+                    PreviousTransformState = ServerTransformState.Value;
                     ServerTransformState.Value = state;
                 }
 
@@ -117,12 +125,22 @@ namespace GameFramework.Network.Component
             }
         }
         
+        
         //Update for all other players in the game that not the local player (player that we controller directly)
+        /// <summary>
+        /// Purpose: Manages movement of remote players (players controlled by other clients). <br/>
+        /// Functionality:
+        /// - Server-side authority: It relies entirely on the server's authoritative state (ServerTransformState). It simply interpolates or snaps to the position and rotation provided by the server.
+        /// - No client-side prediction or input: This method doesn't predict movement or handle input. It only visually updates the player's position and rotation based on the server's updates.
+        /// </summary>
         public void ProcessSimulatedPlayerMovement()
         {
             _tickDeltaTime += Time.deltaTime;
             if (_tickDeltaTime > _tickRate)
             {
+                //There some NullReferenceException occurs here when the client enter the game-play scene in the early game (it stop in some frame-about 53 ticks after)
+                Debug.Log($"TNam - hasMoving: {ServerTransformState.Value.HasStartedMoving}");
+                Debug.Log($"TNam - Value: {ServerTransformState.Value}");
                 if (ServerTransformState.Value.HasStartedMoving)
                 {
                     transform.position = ServerTransformState.Value.Position;
@@ -137,12 +155,13 @@ namespace GameFramework.Network.Component
         [ServerRpc]
         private void MovePlayerServerRpc(int tick, Vector2 movementInput, Vector2 lookInput)
         {
-            //Check if the server receive the message from client or not 
-            if (_tick != _previousTransformState.Tick + 1)
-            {
-                Debug.Log($"Lost the previous message");
-                //Tell client to send the message again
-            }
+            // 
+            /*
+             Check if the server receive the message from client or not with:
+                - if (_tick != PreviousTransformState.Tick + 1) 
+                
+            There an NullReferenceException occur here if we trying to access the "PreviousTransformState" 
+             */
             
             MovePlayer(movementInput);
             RotatePlayer(lookInput);
@@ -156,10 +175,11 @@ namespace GameFramework.Network.Component
                 HasStartedMoving = true
             };
 
-            _previousTransformState = state;
+            PreviousTransformState = state;
             ServerTransformState.Value = state;
         }
 
+        #region UpdatePlayerLocally
         private void RotatePlayer(Vector2 lookInput)
         {
             _vcamTransform.RotateAround(_vcamTransform.position, _vcamTransform.right, -lookInput.y * _turnSpeed * _tickRate);
@@ -177,7 +197,10 @@ namespace GameFramework.Network.Component
             }
 
             _cc.Move(movement * _speed * _tickRate);
-            
         }
+        
+
+        #endregion
+        
     }
 }

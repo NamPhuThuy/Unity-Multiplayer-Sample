@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace GameFramework.Network.Component
+namespace GameFramework.Network.Movement
 {
     public class InputState
     {

@@ -37,7 +37,6 @@ namespace Game
         public void SetData(LobbyPlayerData data)
         {
             _data = data;
-            Debug.Log($"TNam - gamerTag: {_data.GamerTag}");
             _playerName.text = _data.GamerTag;
 
             if (_data.IsReady)

@@ -22,7 +22,6 @@ namespace Game
 
         private void OnLobbyUpdated()
         {
-            Debug.Log($"TNam - LobbySpawner.OnLobbyUpdated() is called");
             List<LobbyPlayerData> playerDatas = GameLobbyManager.Instance.GetPlayers();
 
             for (int i = 0; i < playerDatas.Count; i++)

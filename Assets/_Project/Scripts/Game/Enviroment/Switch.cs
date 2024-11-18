@@ -10,7 +10,7 @@ namespace Game.Enviroment
         private NetworkVariable<bool> _isActive = new NetworkVariable<bool>();
 
         public delegate void SwitchChanged(Switch doorSwitch, bool isActive);
-
+        
         public event SwitchChanged OnSwitchChanged;
         
         

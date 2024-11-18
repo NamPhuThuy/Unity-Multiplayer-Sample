@@ -26,9 +26,9 @@ namespace Game.Enviroment
             }
         }
 
-        private void OnSwitchChanged(Switch doorswitch, bool isActive)
+        private void OnSwitchChanged(Switch doorswitch, bool isactive)
         {
-            _activeSwitches[doorswitch] = isActive;
+            _activeSwitches[doorswitch] = isactive;
             foreach (var doorSwitch in _switches)
             {
                 //if there is at least 1 closed-door -> return -> will not open the door

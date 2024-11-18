@@ -1,7 +1,7 @@
 using Unity.Netcode;
 using UnityEngine;
 
-namespace GameFramework.Network.Component
+namespace GameFramework.Network.Movement
 {
     //INetworkSerializable interface provides a standardized and efficient way to serialize and deserialize data for network transmission.
     public class TransformState : INetworkSerializable
