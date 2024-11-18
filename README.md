@@ -59,6 +59,11 @@ Ta cũng sẽ cần triển khai Coroutine để gửi đi yêu cầu cập nh�
 ### 5.1 Client Prediction
 - Client-side prediction is a network programming technique used in video games intended to conceal negative effects of high latency connections. The technique attempts to make the player's input feel more instantaneous while governing the player's actions on a remote server.
 
+### 5.2 Network Variables
+![](images/networkPrefab_structure.png)
+
+### 5.3 Using Networked Raycast
+
 # References
 
 <a href = "https://www.youtube.com/playlist?list=PLxmtWA2eKdQSf2EXE-tv0lmqmmdDzs0fV">Unity Multiplayer tutorial</a> - Carl Boisvert Dev
