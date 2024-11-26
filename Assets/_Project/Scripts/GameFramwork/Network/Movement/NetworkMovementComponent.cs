@@ -39,7 +39,7 @@ namespace GameFramework.Network.Movement
 
         //The latest value of TransfromState that the Server manage (the latest transform on the Server)
         public NetworkVariable<TransformState> ServerTransformState = new NetworkVariable<TransformState>();
-        public TransformState PreviousTransformState;
+        public TransformState PreviousTransformState = new TransformState();
         
         private void OnEnable()
         {
@@ -62,6 +62,20 @@ namespace GameFramework.Network.Movement
                 PreviousTransformState = serverState;
             }
 
+            //Check for null, before sync with the server 
+            if (_transformStates == null) return;
+            if (_transformStates.Length < 1) return;
+            
+            //The last time i check, 'THIS' cause exception
+            foreach (TransformState state in _transformStates)
+            {
+                if (state == null) 
+                    return;
+            }
+            if (serverState == null) return;
+            
+            
+            //Search for the first 'localState' in _transformStates that match the condition: localState.Tick == serverState.Tick
             TransformState calculateTransform = _transformStates.First(localState => localState.Tick == serverState.Tick);
             if (calculateTransform.Position != serverState.Position)
             {
@@ -166,7 +180,7 @@ namespace GameFramework.Network.Movement
                         Rotation = transform.rotation,
                         HasStartedMoving = true
                     };
-
+                    
                     PreviousTransformState = ServerTransformState.Value;
                     ServerTransformState.Value = state;
                 }
@@ -266,7 +280,7 @@ namespace GameFramework.Network.Movement
                 movement.y = Physics.gravity.y; //= -9.81
             }
 
-            _cc.Move(movement * _speed * _tickRate);
+            _cc.Move(movement * (_speed * _tickRate));
         }
         
 
