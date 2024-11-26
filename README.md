@@ -64,6 +64,8 @@ Ta cũng sẽ cần triển khai Coroutine để gửi đi yêu cầu cập nh�
 
 ### 5.3 Using Networked Raycast
 
+## 6. Client Reconciliation
+
 # References
 
 <a href = "https://www.youtube.com/playlist?list=PLxmtWA2eKdQSf2EXE-tv0lmqmmdDzs0fV">Unity Multiplayer tutorial</a> - Carl Boisvert Dev

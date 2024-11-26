@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
 using Game;
+using Game.Enviroment;
 using GameFramework.Network.Movement;
 using Unity.Netcode;
 using UnityEngine;
@@ -15,6 +16,10 @@ public class PlayerController : NetworkBehaviour
     [SerializeField] private Vector2 _minMaxRotationX = new Vector2(90f, -90f);
     [SerializeField] private Transform _camTransform;
     [SerializeField] private NetworkMovementComponent _playerMovement;
+
+    [Header("Networked Raycast")]
+    [SerializeField] private float _interactDistance;
+    [SerializeField] private LayerMask _interactLayers;
 
     private CharacterController _cc;
     private PlayerControl _playerControl;
@@ -80,6 +85,33 @@ public class PlayerController : NetworkBehaviour
         else
         {
             _playerMovement.ProcessSimulatedPlayerMovement();
+        }
+
+        //If the LocalPlayer click the mouse
+        if (IsLocalPlayer && _playerControl.Player.Interact.inProgress)
+        {
+            if (Physics.Raycast(_camTransform.position, _camTransform.forward, out RaycastHit hit, _interactDistance,
+                    _interactLayers))
+            {
+                if (hit.collider.TryGetComponent<ButtonDoor>(out ButtonDoor buttonDoor))
+                {
+                    //If we hit a button with Raycast successfully, do the same thing on Server
+                    UseButtonServerRpc();
+                }
+            }
+        }
+    }
+
+    [ServerRpc]
+    private void UseButtonServerRpc()
+    {
+        if (Physics.Raycast(_camTransform.position, _camTransform.forward, out RaycastHit hit, _interactDistance,
+                _interactLayers))
+        {
+            if (hit.collider.TryGetComponent<ButtonDoor>(out ButtonDoor buttonDoor))
+            {
+                buttonDoor.Activate();
+            }
         }
     }
 }
