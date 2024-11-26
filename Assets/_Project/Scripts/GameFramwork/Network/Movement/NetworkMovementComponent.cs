@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Unity.Netcode;
 using UnityEditor;
 using UnityEngine;
@@ -18,6 +20,9 @@ namespace GameFramework.Network.Movement
         [SerializeField] private Transform _camSocket;
         [SerializeField] private GameObject _vcam;
 
+
+        [SerializeField] private MeshFilter _meshFilter;
+        [SerializeField] private Color _color;
         private Transform _vcamTransform;
         
         /// <summary>
@@ -34,7 +39,7 @@ namespace GameFramework.Network.Movement
 
         //The latest value of TransfromState that the Server manage (the latest transform on the Server)
         public NetworkVariable<TransformState> ServerTransformState = new NetworkVariable<TransformState>();
-        public TransformState PreviousTransformState = new TransformState();
+        public TransformState PreviousTransformState;
         
         private void OnEnable()
         {
@@ -48,9 +53,74 @@ namespace GameFramework.Network.Movement
             _vcamTransform = _vcam.transform;
         }
 
-        private void OnServerStateChanged(TransformState previousvalue, TransformState newvalue)
+        private void OnServerStateChanged(TransformState previousvalue, TransformState serverState)
         {
-            PreviousTransformState = previousvalue;
+            // PreviousTransformState = previousvalue;
+            if (!IsLocalPlayer) return;
+            if (PreviousTransformState == null)
+            {
+                PreviousTransformState = serverState;
+            }
+
+            TransformState calculateTransform = _transformStates.First(localState => localState.Tick == serverState.Tick);
+            if (calculateTransform.Position != serverState.Position)
+            {
+                //We are out of sync with the server
+                /*
+                How to fix:
+                - Teleport
+                - Replay
+                */
+                
+                Debug.Log($"Correcting client position");
+                //- Teleport the player to the server's position
+                TeleportPlayer(serverState);
+                
+                // - Replay the inputs that happened after
+                IEnumerable<InputState> inputs = _inputStates.Where(input => input.Tick > serverState.Tick);
+                inputs = from input in inputs orderby input.Tick select input;
+                
+                foreach (InputState inputState in inputs)
+                {
+                    MovePlayer(inputState.MovementInput);
+                    RotatePlayer(inputState.LookInput);
+
+                    TransformState newTransformstate = new TransformState()
+                    {
+                        Tick = inputState.Tick,
+                        Position = transform.position,
+                        Rotation = transform.rotation,
+                        HasStartedMoving = true
+                    };
+
+                    for (int i = 0; i < _transformStates.Length; i++)
+                    {
+                        if (_transformStates[i].Tick == inputState.Tick)
+                        {
+                            _transformStates[i] = newTransformstate;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        private void TeleportPlayer(TransformState state)
+        {
+            //Disable the CharacterController so that we can directly change the player's transform without any bug
+            _cc.enabled = false;
+            transform.position = state.Position;
+            transform.rotation = state.Rotation;
+            _cc.enabled = true;
+
+            for (int i = 0; i < _transformStates.Length; i++)
+            {
+                if (_transformStates[i].Tick == state.Tick)
+                {
+                    _transformStates[i] = state;
+                    break;
+                }
+            }
         }
 
         /// <summary>
@@ -139,8 +209,8 @@ namespace GameFramework.Network.Movement
             if (_tickDeltaTime > _tickRate)
             {
                 //There some NullReferenceException occurs here when the client enter the game-play scene in the early game (it stop in some frame-about 53 ticks after)
-                Debug.Log($"TNam - hasMoving: {ServerTransformState.Value.HasStartedMoving}");
-                Debug.Log($"TNam - Value: {ServerTransformState.Value}");
+                /*Debug.Log($"TNam - hasMoving: {ServerTransformState.Value.HasStartedMoving}");
+                Debug.Log($"TNam - Value: {ServerTransformState.Value}");*/
                 if (ServerTransformState.Value.HasStartedMoving)
                 {
                     transform.position = ServerTransformState.Value.Position;
@@ -201,6 +271,16 @@ namespace GameFramework.Network.Movement
         
 
         #endregion
-        
+
+        /*private void OnDrawGizmos()
+        {
+            Debug.Log($"TNam - OnDrawGizmos");
+            if (ServerTransformState.Value != null)
+            {
+                Debug.Log($"TNam - Draw Shadow");
+                Gizmos.color = _color;
+                Gizmos.DrawMesh(_meshFilter.mesh, ServerTransformState.Value.Position);
+            }
+        }*/
     }
 }

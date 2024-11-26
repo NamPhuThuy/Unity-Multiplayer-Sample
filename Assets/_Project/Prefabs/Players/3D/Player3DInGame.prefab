@@ -795,6 +795,11 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 2088376122574816674, guid: 4bac1ff0769bbf2429d17e4d664a881f, type: 3}
   m_PrefabInstance: {fileID: 1727788610216498263}
   m_PrefabAsset: {fileID: 0}
+--- !u!33 &977816858616198615 stripped
+MeshFilter:
+  m_CorrespondingSourceObject: {fileID: 1903810802991718784, guid: 4bac1ff0769bbf2429d17e4d664a881f, type: 3}
+  m_PrefabInstance: {fileID: 1727788610216498263}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4544477101985238385 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2948572764246743334, guid: 4bac1ff0769bbf2429d17e4d664a881f, type: 3}
@@ -888,3 +893,5 @@ MonoBehaviour:
   _turnSpeed: 10
   _camSocket: {fileID: 1718340380998432558}
   _vcam: {fileID: 8310371892335750213}
+  _meshFilter: {fileID: 977816858616198615}
+  _color: {r: 1, g: 0.69468415, b: 0, a: 0.6745098}
