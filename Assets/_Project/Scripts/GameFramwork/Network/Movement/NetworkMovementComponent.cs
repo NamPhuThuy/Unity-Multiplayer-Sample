@@ -74,7 +74,6 @@ namespace GameFramework.Network.Movement
             }
             if (serverState == null) return;
             
-            
             //Search for the first 'localState' in _transformStates that match the condition: localState.Tick == serverState.Tick
             TransformState calculateTransform = _transformStates.First(localState => localState.Tick == serverState.Tick);
             if (calculateTransform.Position != serverState.Position)
@@ -181,6 +180,13 @@ namespace GameFramework.Network.Movement
                         HasStartedMoving = true
                     };
                     
+                    /*
+                     We have to save the state with SaveState() before the server change the value.
+                     If we dont call the SaveState(), the server's value was getting updated before the server actually save it to the local variables (is this talk about host?)
+                
+                     */
+                    SaveState(movementInput, lookInput, bufferIndex);
+                    
                     PreviousTransformState = ServerTransformState.Value;
                     ServerTransformState.Value = state;
                 }
@@ -234,6 +240,27 @@ namespace GameFramework.Network.Movement
                 _tickDeltaTime -= _tickRate;
                 _tick++;
             }
+        }
+
+        private void SaveState(Vector2 movementInput, Vector2 lookInput, int bufferIndex)
+        {
+            InputState inputState = new InputState()
+            {
+                Tick = _tick,
+                MovementInput = movementInput,
+                LookInput = lookInput
+            };
+
+            TransformState transformState = new TransformState()
+            {
+                Tick = _tick,
+                Position = transform.position,
+                Rotation = transform.rotation,
+                HasStartedMoving = true
+            };
+
+            _inputStates[bufferIndex] = inputState;
+            _transformStates[bufferIndex] = transformState;
         }
         
         [ServerRpc]
