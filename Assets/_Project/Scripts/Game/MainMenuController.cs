@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -17,6 +18,8 @@ namespace Game
 
         [SerializeField] private Button _hostButton;
         [SerializeField] private Button _joinButton;
+        [SerializeField] private Button _reJoinButton;
+        [SerializeField] private Button _leaveButton;
 
         [SerializeField] private Button _submitCodeButton;
         [SerializeField] private TextMeshProUGUI _codeText;
@@ -25,6 +28,8 @@ namespace Game
         {
             _hostButton.onClick.AddListener(OnHostClicked);
             _joinButton.onClick.AddListener(OnJoinClicked);
+            _reJoinButton.onClick.AddListener(OnRejoinClicked);
+            _leaveButton.onClick.AddListener(OnLeaveLobbyClicked);
             _submitCodeButton.onClick.AddListener(OnSubmitCodeClicked);
         }
 
@@ -33,6 +38,19 @@ namespace Game
             _hostButton.onClick.RemoveListener(OnHostClicked);
             _joinButton.onClick.RemoveListener(OnJoinClicked);
             _submitCodeButton.onClick.RemoveListener(OnSubmitCodeClicked);
+        }
+
+        private async void Start()
+        {
+            // OnLeaveLobbyClicked();
+            if (await GameLobbyManager.Instance.HasActiveLobbies())
+            {
+                _hostButton.gameObject.SetActive(false);
+                _joinButton.gameObject.SetActive(false);
+                
+                _reJoinButton.gameObject.SetActive(true);
+                _leaveButton.gameObject.SetActive(true);
+            }
         }
 
         private async void OnHostClicked()
@@ -67,6 +85,25 @@ namespace Game
             }
 
             Debug.Log($"code = {code}");
+        }
+        
+        private async void OnRejoinClicked()
+        {
+            bool succeeded = await GameLobbyManager.Instance.RejoinGame();
+            if (succeeded)
+            {
+                SceneManager.LoadSceneAsync("Lobby");
+            }
+        }
+        
+        private async void OnLeaveLobbyClicked()
+        {
+            bool succeeded = await GameLobbyManager.Instance.LeaveAllLobbies();
+
+            if ( succeeded)
+            {
+                Debug.Log("Left all lobbies");
+            }
         }
     }
 }

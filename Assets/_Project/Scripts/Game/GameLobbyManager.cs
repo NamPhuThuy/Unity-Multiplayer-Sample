@@ -46,6 +46,11 @@ namespace Game
         {
             LobbyEvents.OnLobbyUpdated -= OnLobbyUpdated;
         }
+        
+        public async Task<bool> HasActiveLobbies()
+        {
+            return await LobbyManager.Instance.HasActiveLobbies();
+        }
 
         public string GetLobbyCode()
         {
@@ -185,6 +190,17 @@ namespace Game
             await LobbyManager.Instance.UpdatePlayerData(_localLobbyPlayerData.Id, _localLobbyPlayerData.Serialize(), allocationId, connectionData);
             
             return true;
+        }
+
+
+        public async Task<bool> RejoinGame()
+        {
+            return await LobbyManager.Instance.RejoinLobby();
+        }
+
+        public async Task<bool> LeaveAllLobbies()
+        {
+            return await LobbyManager.Instance.LeaveAllLobby();
         }
     }
 }
