@@ -37,6 +37,11 @@ namespace Game
         /// </summary>
         [Header("Not Classified")]
         private bool _inGame = false;
+
+        [Header("Host crashed prevent")] 
+        private bool _wasDisconnected = false;
+
+        private string _previousRelayCode;
         private void OnEnable()
         {
             LobbyEvents.OnLobbyUpdated += OnLobbyUpdated;
@@ -47,6 +52,7 @@ namespace Game
             LobbyEvents.OnLobbyUpdated -= OnLobbyUpdated;
         }
         
+        //-GETTERS
         public async Task<bool> HasActiveLobbies()
         {
             return await LobbyManager.Instance.HasActiveLobbies();
@@ -57,6 +63,11 @@ namespace Game
             return LobbyManager.Instance.GetLobbyCode();
         }
 
+        public int GetMapIndex()
+        {
+            return _lobbyData.MapIndex;
+        }
+        
         public async Task<bool> CreateLobby()
         {
             //Initialize infor of the Host
@@ -128,11 +139,20 @@ namespace Game
 
             if (_lobbyData.RelayJoinCode != default && !_inGame)
             {
-                //Join the Relay
-                await JoinRelayServer(_lobbyData.RelayJoinCode);
-                
-                Debug.Log($"Scene name: {_lobbyData.SceneName}");
-                SceneManager.LoadSceneAsync(_lobbyData.SceneName);
+                if (_wasDisconnected)
+                {
+                    if (_lobbyData.RelayJoinCode != _previousRelayCode)
+                    {
+                        await JoinRelayServer(_lobbyData.RelayJoinCode);
+                        SceneManager.LoadSceneAsync(_lobbyData.SceneName);
+                    }
+                }
+                else
+                {
+                    //Join the Relay
+                    await JoinRelayServer(_lobbyData.RelayJoinCode);
+                    SceneManager.LoadSceneAsync(_lobbyData.SceneName);
+                }
             }
         }
 
@@ -146,11 +166,6 @@ namespace Game
             _localLobbyPlayerData.IsReady = true;
             return await LobbyManager.Instance.UpdatePlayerData(_localLobbyPlayerData.Id,
                 _localLobbyPlayerData.Serialize());
-        }
-
-        public int GetMapIndex()
-        {
-            return _lobbyData.MapIndex;
         }
 
         public async Task<bool> SetSelectedMap(int currentMapIndex, string sceneName)
@@ -201,6 +216,21 @@ namespace Game
         public async Task<bool> LeaveAllLobbies()
         {
             return await LobbyManager.Instance.LeaveAllLobby();
+        }
+
+        public async void GoBackToLobby(bool wasDisconnected)
+        {
+            _inGame = false;
+            _wasDisconnected = wasDisconnected;
+
+            if (_wasDisconnected)
+            {
+                _previousRelayCode = _lobbyData.RelayJoinCode;
+            }
+
+            _localLobbyPlayerData.IsReady = false;
+            await LobbyManager.Instance.UpdatePlayerData(_localLobbyPlayerData.Id, _localLobbyPlayerData.Serialize());
+            SceneManager.LoadSceneAsync("Lobby");
         }
     }
 }

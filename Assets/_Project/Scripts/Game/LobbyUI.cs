@@ -40,6 +40,10 @@ namespace Game
             _readyButton.onClick.AddListener(OnReadyPressed);
 
             LobbyEvents.OnLobbyUpdated += OnLobbyUpdated;
+
+            //Make sure when we go back to the lobby, the cursor will appear again 
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
         }
 
         private void OnDisable()

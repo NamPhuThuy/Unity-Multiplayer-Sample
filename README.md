@@ -65,6 +65,7 @@ Ta cũng sẽ cần triển khai Coroutine để gửi đi yêu cầu cập nh�
 ### 5.3 Using Networked Raycast
 
 ## 6. Client Reconciliation
+- Nếu 1 client ngắt kết nối (kể cả do crash), những client khác vẫn có thể biết được thông tin này (do server cung cấp). Tuy nhiên, nếu server ngắt kết nối, các client khác sẽ khó mà nhận được thông tin này (vẫn sẽ mất kết nối)
 
 # References
 

@@ -103,6 +103,7 @@ namespace Game
             if ( succeeded)
             {
                 Debug.Log("Left all lobbies");
+                SceneManager.LoadSceneAsync("MainMenu");
             }
         }
     }
