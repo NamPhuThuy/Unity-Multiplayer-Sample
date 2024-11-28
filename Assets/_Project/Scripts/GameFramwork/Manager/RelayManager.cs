@@ -5,8 +5,12 @@ using Unity.Services.Relay;
 using Unity.Services.Relay.Models;
 using UnityEngine;
 
+
 namespace GameFramwork.Manager
 {
+    /// <summary>
+    /// Manages the creation and joining of multiplayer game sessions using Unity's Relay service
+    /// </summary>
     public class RelayManager : Singleton<RelayManager>
     {
         private string _joinCode;
@@ -110,9 +114,5 @@ namespace GameFramwork.Manager
 
             return true;
         }
-
-       
-
-       
     }
 }

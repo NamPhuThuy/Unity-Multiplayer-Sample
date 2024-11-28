@@ -48,11 +48,6 @@ namespace Game
 
         private void OnDisable()
         {
-            //
-            if (GameLobbyManager.Instance.IsHost)
-            {
-                
-            }
             _rightButton.onClick.RemoveAllListeners();
             _leftButton.onClick.RemoveAllListeners();
             _startButton.onClick.RemoveAllListeners();
@@ -72,7 +67,7 @@ namespace Game
             }
             else
             {
-                GameLobbyManager.Instance.SetSelectedMap(_currentMapIndex, _mapSelectionData.maps[_currentMapIndex].sceneName);
+                GameLobbyManager.Instance.SetSelectedMap(_currentMapIndex);
             }
         }
 
@@ -88,7 +83,7 @@ namespace Game
             }
 
             UpdateMapThumbnail();
-            GameLobbyManager.Instance.SetSelectedMap(_currentMapIndex, _mapSelectionData.maps[_currentMapIndex].sceneName);
+            GameLobbyManager.Instance.SetSelectedMap(_currentMapIndex);
         }
 
         private async void OnRightButtonClick()
@@ -103,7 +98,7 @@ namespace Game
             }
 
             UpdateMapThumbnail();
-            GameLobbyManager.Instance.SetSelectedMap(_currentMapIndex, _mapSelectionData.maps[_currentMapIndex].sceneName);
+            GameLobbyManager.Instance.SetSelectedMap(_currentMapIndex);
         }
         
         private async void OnStartButtonClick()
@@ -118,7 +113,6 @@ namespace Game
             {
                 _readyButton.gameObject.SetActive(false);
             }
-            
         }
         
         private void UpdateMapThumbnail()

@@ -48,11 +48,5 @@ namespace Game
             Debug.Log($"Signed in, token: {AuthenticationService.Instance.AccessToken}");
             Debug.Log($"Signed in, player id: {AuthenticationService.Instance.PlayerId}");
         }
-
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
     }
 }

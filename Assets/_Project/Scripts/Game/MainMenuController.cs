@@ -42,7 +42,7 @@ namespace Game
 
         private async void Start()
         {
-            // OnLeaveLobbyClicked();
+            //GameLobbyManger gameobject is created after this line
             if (await GameLobbyManager.Instance.HasActiveLobbies())
             {
                 _hostButton.gameObject.SetActive(false);

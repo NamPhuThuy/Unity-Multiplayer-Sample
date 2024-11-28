@@ -6,7 +6,6 @@ using GameFramework.Events;
 using Unity.Services.Authentication;
 using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace GameFramework.Manager
@@ -31,12 +30,20 @@ namespace GameFramework.Manager
             return false;
         }
 
-        //GETTERS
+
+        #region GETTERS
+
         public string GetLobbyCode()
         {
             return _lobby?.LobbyCode;
         }
 
+        public string GetHostId()
+        {
+            return _lobby?.HostId;
+        }
+
+        #endregion
 
         public async Task<bool> CreateLobby(int maxPlayers, bool isPrivate, Dictionary<string, string> data, Dictionary<string, string> lobbyData)
         {
@@ -218,12 +225,7 @@ namespace GameFramework.Manager
             LobbyEvents.OnLobbyUpdated(_lobby); 
             return true;
         }
-
-        public string GetHostId()
-        {
-            return _lobby.HostId;
-        }
-
+        
 
         public async Task<bool> RejoinLobby()
         {
@@ -243,7 +245,7 @@ namespace GameFramework.Manager
             return true;
         }
 
-        public async Task<bool> LeaveAllLobby()
+        public async Task<bool> LeaveAllLobbies()
         {
             string playerId = AuthenticationService.Instance.PlayerId;
             foreach (string lobbyId in _joinedLobbiesId)

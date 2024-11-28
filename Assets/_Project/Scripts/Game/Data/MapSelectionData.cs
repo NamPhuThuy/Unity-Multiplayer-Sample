@@ -17,5 +17,5 @@ public struct MapInfo
 {
     public Color mapThumbnail;
     public string mapName;
-    public string sceneName;
+    public Material mapMat;
 }

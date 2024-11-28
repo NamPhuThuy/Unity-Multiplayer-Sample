@@ -1,8 +1,6 @@
-
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Services.Authentication;
-
 using Unity.Services.Lobbies.Models;
 using Game.Data;
 using GameFramework.Core;
@@ -28,7 +26,6 @@ namespace Game
         
         public bool IsHost => _localLobbyPlayerData.Id == LobbyManager.Instance.GetHostId();
         
-
         [Header("Relay")]
         [SerializeField] private int _maxNumPlayers = 4;
         
@@ -38,13 +35,15 @@ namespace Game
         [Header("Not Classified")]
         private bool _inGame = false;
 
-        [Header("Host crashed prevent")] 
+        [Header("Host crashed handling")] 
         private bool _wasDisconnected = false;
 
         private string _previousRelayCode;
         private void OnEnable()
         {
             LobbyEvents.OnLobbyUpdated += OnLobbyUpdated;
+            string currentSceneName = SceneManager.GetActiveScene().name;
+            Debug.Log("Current Scene Name: " + currentSceneName);
         }
 
         private void OnDisable()
@@ -65,7 +64,7 @@ namespace Game
 
         public int GetMapIndex()
         {
-            return _lobbyData.MapIndex;
+            return MapManager.Instance.CurrentMapId;
         }
         
         public async Task<bool> CreateLobby()
@@ -76,7 +75,7 @@ namespace Game
             
             //Initialize infor of the Lobby
             _lobbyData = new LobbyData();
-            _lobbyData.Initialize(0);
+            _lobbyData.Initialize();
 
             bool succeeded = await LobbyManager.Instance.CreateLobby(_maxNumPlayers, true, _localLobbyPlayerData.Serialize(), _lobbyData.Serialize());
             return succeeded;
@@ -144,14 +143,14 @@ namespace Game
                     if (_lobbyData.RelayJoinCode != _previousRelayCode)
                     {
                         await JoinRelayServer(_lobbyData.RelayJoinCode);
-                        SceneManager.LoadSceneAsync(_lobbyData.SceneName);
+                        SceneManager.LoadSceneAsync("GamePlay");
                     }
                 }
                 else
                 {
                     //Join the Relay
                     await JoinRelayServer(_lobbyData.RelayJoinCode);
-                    SceneManager.LoadSceneAsync(_lobbyData.SceneName);
+                    SceneManager.LoadSceneAsync("GamePlay");
                 }
             }
         }
@@ -167,12 +166,10 @@ namespace Game
             return await LobbyManager.Instance.UpdatePlayerData(_localLobbyPlayerData.Id,
                 _localLobbyPlayerData.Serialize());
         }
-
-        public async Task<bool> SetSelectedMap(int currentMapIndex, string sceneName)
+        
+        public void SetSelectedMap(int currentMapIndex)
         {
-            _lobbyData.MapIndex = currentMapIndex;
-            _lobbyData.SceneName = sceneName;
-            return await LobbyManager.Instance.UpdateLobbyData(_lobbyData.Serialize());
+            MapManager.Instance.CurrentMapId = currentMapIndex;
         }
 
         public async Task StartGame()
@@ -191,8 +188,8 @@ namespace Game
             
             //Update player data
             await LobbyManager.Instance.UpdatePlayerData(_localLobbyPlayerData.Id, _localLobbyPlayerData.Serialize(), allocationId, connectionData);
-
-            SceneManager.LoadSceneAsync(_lobbyData.SceneName);
+            
+            SceneManager.LoadSceneAsync("GamePlay");
         }
         
         private async Task<bool> JoinRelayServer(string relayJoinCode)
@@ -215,7 +212,7 @@ namespace Game
 
         public async Task<bool> LeaveAllLobbies()
         {
-            return await LobbyManager.Instance.LeaveAllLobby();
+            return await LobbyManager.Instance.LeaveAllLobbies();
         }
 
         public async void GoBackToLobby(bool wasDisconnected)
