@@ -1,17 +1,18 @@
-# Unity-Multiplayer-with-Netcode-for-GameObjects
-This is a sample multiplayer game
-
+# Set up
+## Yêu cầu
+- **Unity Editor**: 2022.3.24f1
+- Packages: 
+  - **Authentication** 3.3.3, **Lobby** 1.2.2, **Netcode for GameObjects** 1.8.1, **Multiplayer Tools** 1.1.1
+  - **Cinemachine** 2.9.7, **Input System** 1.7.0
 
 ## 1: Create and Join Lobby
-- Step 1: Download packages
-  - Authentication 3.3.3, Lobby 1.2.2
+- B1: Kết nối với **Unity Service**
+  - Đăng nhập Unity account 
+  - Tạo 1 project mới trên Unity Cloud
+  - Kết nối local Unity project với Unity Cloud project vừa tạo: Project Settings -> Services -> Link to the <project_name> project
 
-- Step 2: Connect to **Unity Service**
-  - Log in Unity account 
-  - Create new project on Unity Cloud with name: **Unity-Multiplayer-with-Netcode-for-GameObjects**
-  - Project Settings -> Services -> Link to the **Unity-Multiplayer-with-Netcode-for-GameObjects** project
-
-### Explain the flow
+# 
+## Explain the flow
 Each player may request an **Access Token** from the Authentication Service, this **Access Token** is used for many Unity Services: Relay, Lobby,..  
 ![](images/multiplayer_1.png)
 
@@ -27,21 +28,37 @@ Each player may request an **Access Token** from the Authentication Service, thi
 - RefreshLobby keeps clients aware of the current state of the lobby. 
 - Both are vital for a smooth and reliable multiplayer experience
 
-**HeartbeatLobby**: a periodic message sent by each client to the server to indicate that they are still connected and active. It's essential for:
-- Detecting disconnections: If the server doesn't receive a heartbeat within a certain timeframe, it knows the client has likely disconnected (due to network issues, crashes, etc.). This allows the server to remove the player from the game and update the lobby accordingly.
+## Keywords
+**HeartbeatLobby**: 
+- Mục đích: gửi các thông báo định kì tới server, cho biết client này vẫn đang hoạt động. 
+- Lợi ích:
+  - **Nhận biết sự cố mất kết nối**: nếu server không nhận được 1 heartbeat nào trong khoảng thời gian nhất định, client này sẽ được coi là đã mất kết nối (có thể do vấn đề về mạng, crash,..). Sau đó, server có thể xóa client này, và cập nhật lại lobby 
+  - **Duy trì session state**: Heartbeats có thể mang 1 số thông tin cơ bản về client's state (Hp, trạng thái sẵn sàng), cho phép server nắm được 1 số thông tin mà không cần phải cập nhật liên tục
 
-- Maintaining session state: Heartbeats can also carry minimal information about the client's state (e.g., current health, ready status), allowing the server to keep track of player status without constant updates.
+**RefreshLobby**: 
+- Mục đích: yêu cầu server trả về đầy đủ data của lobby hiện tại, gồm: danh sách player, các thuộc tính của lobby,..
+- Lợi ích:
+  - Cập nhật lại lobby: trong 1 lobby, nhiều sự kiện có thể diễn ra: các player tham gia hoặc rời lobby, player thay đổi trạng thái sẵn sàng. Tất cả player trong lobby đều phải nhận được thông tin về những sự thay đổi này
 
-**RefreshLobby**: This request is typically initiated by a client to get the latest state of the lobby. It's needed because:
-- Lobby updates: Other players might join or leave the lobby. The RefreshLobby request ensures that each client has the most up-to-date list of players and their statuses.
-- Handling asynchronous actions: If a player changes their ready status or performs some other action that affects the lobby, the server needs a mechanism to inform other clients. RefreshLobby provides a way for clients to request this information.
-- Error handling: If a client experiences a temporary network hiccup, it might miss some updates. RefreshLobby allows it to resynchronize with the server's state.
+  
+<div style="text-align: center;">
+<figure>
+  <img src="images/multiplayer_3.png" alt="Image description" width="500px">
+<br>
+  <figcaption style="text-align: center">Heartbeat request</figcaption>
+</figure>
+</div>
 
-Ta sẽ cần triển khai một Coroutine để gửi đi các **HeartBeatRequest** theo thời gian   
-![](images/multiplayer_3.png)
+<br>
 
-Ta cũng sẽ cần triển khai Coroutine để gửi đi yêu cầu cập nhật sau mỗi khoảng thời gian nhất định   
-![](images/multiplayer_4.png)
+<div style="text-align: center;">
+<figure>
+  <img src="images/multiplayer_4.png" alt="Image description" width="500px">
+<br>
+  <figcaption style="text-align: center">Refresh request</figcaption>
+</figure>
+</div>
+
 
 ## 2: Sync Lobby Data
 
@@ -69,4 +86,5 @@ Ta cũng sẽ cần triển khai Coroutine để gửi đi yêu cầu cập nh�
 
 # References
 
-<a href = "https://www.youtube.com/playlist?list=PLxmtWA2eKdQSf2EXE-tv0lmqmmdDzs0fV">Unity Multiplayer tutorial</a> - Carl Boisvert Dev
+<a href = "https://www.youtube.com/playlist?list=PLxmtWA2eKdQSf2EXE-tv0lmqmmdDzs0fV">Unity Multiplayer tutorial</a> - Carl Boisvert Dev  
+<a href = "https://docs-multiplayer.unity3d.com/">Unity Multiplayer documents</a> - Unity

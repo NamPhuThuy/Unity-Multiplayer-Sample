@@ -12,7 +12,7 @@ namespace Game
     public class MapManager : Singleton<MapManager>
     {
         [SerializeField] private MapSelectionData _mapData;
-        [SerializeField] private int _currentMapId = 0;
+        private int _currentMapId = 0;
 
         public int CurrentMapId
         {

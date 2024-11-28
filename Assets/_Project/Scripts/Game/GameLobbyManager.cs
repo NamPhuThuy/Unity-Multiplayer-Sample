@@ -83,11 +83,6 @@ namespace Game
 
         public async Task<bool> JoinLobby(string code)
         {
-            /*Dictionary<string, string> playerData = new Dictionary<string, string>()
-        {
-            {"GamerTag", "JoinPlayer"}
-        };*/
-
             _localLobbyPlayerData = new LobbyPlayerData();
             _localLobbyPlayerData.Initialize(AuthenticationService.Instance.PlayerId, "JoinPlayer");
 

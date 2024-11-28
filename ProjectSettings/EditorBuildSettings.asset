@@ -16,23 +16,11 @@ EditorBuildSettings:
     guid: c96f5e6adae8e3a48a650f399dd6110e
   - enabled: 1
     path: Assets/_Project/Scenes/Lobby.unity
-    guid: 4dd219ef68cd80d47b2b744c82907827
+    guid: aecc7079d83092b41a6f481f80543a88
   - enabled: 1
     path: Assets/_Project/Scenes/MainMenu.unity
     guid: c19fc067f0294ab4e9132eea287d67b9
   - enabled: 1
-    path: Assets/_Project/Scenes/Maps/CyanScene.unity
-    guid: 0075685bc26383d44be2ed451422effb
-  - enabled: 1
-    path: Assets/_Project/Scenes/Maps/GreenScene.unity
-    guid: 6e3d06d635506a74f923e6ab772f81e4
-  - enabled: 1
     path: Assets/_Project/Scenes/GamePlay.unity
     guid: 6c289155fb5170648ae30b79fd9970b0
-  - enabled: 1
-    path: Assets/_Project/Scenes/Maps/OrangeScene.unity
-    guid: b6ab84487a193ed4ea53ce27132682bd
-  - enabled: 1
-    path: Assets/_Project/Scenes/Maps/PurpleScene.unity
-    guid: f1994180238a8d445b27cb9284d52739
   m_configObjects: {}

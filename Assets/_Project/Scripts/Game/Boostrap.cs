@@ -12,7 +12,7 @@ namespace Game
 
         async void Start()
         {
-            //Make sure the Unity Services is initialized before anything
+            //Make sure the Unity Services is initialized before anything else
             await UnityServices.InitializeAsync();
 
             if (UnityServices.State == ServicesInitializationState.Initialized)
