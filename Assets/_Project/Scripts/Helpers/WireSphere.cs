@@ -3,14 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WireSphere : MonoBehaviour
+namespace Helpers
 {
-    [SerializeField] private Color _color;
-    [SerializeField] private float _size;
-
-    private void OnDrawGizmos()
+    public class WireSphere : MonoBehaviour
     {
-        Gizmos.color = _color;
-        Gizmos.DrawWireSphere(transform.position, _size);
+        [SerializeField] private Color _color;
+        [SerializeField] private float _size;
+
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = _color;
+            Gizmos.DrawWireSphere(transform.position, _size);
+        }
     }
 }

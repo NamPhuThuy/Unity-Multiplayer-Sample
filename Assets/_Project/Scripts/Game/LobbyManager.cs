@@ -2,15 +2,16 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using GameFramework.Core;
 using GameFramework.Events;
 using Unity.Services.Authentication;
 using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
 
-namespace GameFramework.Manager
+namespace Game
 {
-    public class LobbyManager : Core.Singleton<LobbyManager>
+    public class LobbyManager : Singleton<LobbyManager>
     {
         /// <summary>
         /// The current Lobby

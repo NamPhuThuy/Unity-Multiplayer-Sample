@@ -3,15 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class HelperButton : MonoBehaviour
+namespace Helpers
 {
-    public void LoadScene(int id)
+    public class HelperButton : MonoBehaviour
     {
-        SceneManager.LoadScene(id);
-    }
+        public void LoadScene(int id)
+        {
+            SceneManager.LoadScene(id);
+        }
 
-    public void QuitApp()
-    {
-        Application.Quit();
+        public void QuitApp()
+        {
+            Application.Quit();
+        }
     }
 }

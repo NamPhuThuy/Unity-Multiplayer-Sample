@@ -5,7 +5,7 @@ using Unity.Services.Lobbies.Models;
 using Game.Data;
 using GameFramework.Core;
 using GameFramework.Events;
-using GameFramework.Manager;
+using Game;
 using GameFramwork.Manager;
 using UnityEngine;
 using UnityEngine.SceneManagement;
