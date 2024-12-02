@@ -5,7 +5,7 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 #endif
 
-namespace Editor
+namespace EditorExtend
 {
     public class MenuExtend : MonoBehaviour
     {

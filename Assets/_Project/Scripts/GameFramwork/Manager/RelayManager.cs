@@ -57,28 +57,31 @@ namespace GameFramwork.Manager
         }
         
         /// <summary>
-        /// Create a Relay connection
+        /// Create a Relay server which acts as a central hub for communication between multiple clients.
         /// </summary>
         /// <param name="maxConnection"> max number of players</param>
         /// <returns>a join code</returns>
         public async Task<string> CreateRelay(int maxConnection)
         {
             /*
-             - CreateAllocationAsync(maxConnection): makes an asynchronous request to the relay service provider to allocate resources for a new relay connection. The maxConnection parameter is passed to the provider.
+            - CreateAllocationAsync(): request the Relay Service to allocate resources for a new relay connection
+            - Allocation allocation: result of allocation-request, contains infor of allocated relay connection: connection details, allocation ID,..
 
-            - Allocation allocation: The result of the allocation request. This object contains information about the allocated relay connection, including connection details and an allocation ID.
+            - Host sử dụng allocationId để kết nối với Relay Service và tạo kết nối P2P với các clients khác 
             */
             Allocation allocation = await RelayService.Instance.CreateAllocationAsync(maxConnection);
             
             /*
-             - GetJoinCodeAsync(allocation.AllocationId): After the allocation is successful, this method retrieves the unique join code associated with the newly created relay connection.
+             - GetJoinCodeAsync(allocation.AllocationId): retrieves the unique join code associated with the newly created relay connection.
             */
             _joinCode = await RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
             
             /*
              - allocation.ServerEndpoints: The Allocation object contains a collection of endpoints representing how to connect to the relay server.
 
-            - .First(conn => conn.ConnectionType == "dtls"): This uses LINQ to select the first endpoint where the ConnectionType is "dtls" (Datagram Transport Layer Security). DTLS is a secure protocol often used for real-time communication over unreliable networks.
+            - .First(conn => conn.ConnectionType == "dtls"): uses LINQ to select the first endpoint where the ConnectionType is "dtls" (Datagram Transport Layer Security). DTLS is a secure protocol often used for real-time communication over unreliable networks.
+            
+            - DTLS is a protocol that operates at the Transport Layer of the OSI model. It provides security for UDP-based communications
             */
             RelayServerEndpoint dtlsEndpoint = allocation.ServerEndpoints.First(conn => conn.ConnectionType == "dtls");
 

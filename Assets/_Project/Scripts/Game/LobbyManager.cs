@@ -93,15 +93,18 @@ namespace Game
         {
             while (true)
             {
-                //Retrieve information about a specific lobby identified by lobbyId
-                Task<Lobby> task = LobbyService.Instance.GetLobbyAsync(lobbyId);
-                yield return new WaitUntil(() => task.IsCompleted); //wait until the task (refresh Lobby) is complete
+                //Retrieve latest information about a specific lobby identified by lobbyId
+                Task<Lobby> requestLobbyTask = LobbyService.Instance.GetLobbyAsync(lobbyId);
+                yield return new WaitUntil(() => requestLobbyTask.IsCompleted); //wait until the task is complete
 
-                Lobby newLobby = task.Result;
+                Lobby newLobby = requestLobbyTask.Result;
                 //Check if the "newLobby" is actually new
                 if (newLobby.LastUpdated > _lobby.LastUpdated)
                 {
                     _lobby = newLobby;
+                    
+                    
+                    // Notify all listeners that the Lobby just updated
                     LobbyEvents.OnLobbyUpdated?.Invoke(_lobby);
                 }
 

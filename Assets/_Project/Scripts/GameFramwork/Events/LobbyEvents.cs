@@ -7,6 +7,9 @@ namespace GameFramework.Events
     {
         public delegate void LobbyUpdated(Lobby lobby);
 
+        /// <summary>
+        /// Events is invoked 
+        /// </summary>
         public static LobbyUpdated OnLobbyUpdated;
     }
 }

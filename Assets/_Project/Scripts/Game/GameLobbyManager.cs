@@ -90,6 +90,7 @@ namespace Game
             return succeeded;
         }
 
+        
         private async void OnLobbyUpdated(Lobby lobby)
         {
             //Ask Lobby Manager to give us the data of the player we want 
@@ -198,7 +199,6 @@ namespace Game
             
             return true;
         }
-
 
         public async Task<bool> RejoinGame()
         {

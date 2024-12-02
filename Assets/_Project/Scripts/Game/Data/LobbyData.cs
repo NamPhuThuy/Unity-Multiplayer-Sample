@@ -9,7 +9,9 @@ namespace Game.Data
 {
     public class LobbyData
     {
-        //
+        /// <summary>
+        /// The code to join to the Relay Server
+        /// </summary>
         private string _relayJoinCode;
         
 
