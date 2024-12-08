@@ -7,6 +7,7 @@ using GameFramework.Core;
 using GameFramework.Events;
 using Game;
 using GameFramwork.Manager;
+using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -223,6 +224,7 @@ namespace Game
             _localLobbyPlayerData.IsReady = false;
             await LobbyManager.Instance.UpdatePlayerData(_localLobbyPlayerData.Id, _localLobbyPlayerData.Serialize());
             SceneManager.LoadSceneAsync("Lobby");
+            
         }
     }
 }

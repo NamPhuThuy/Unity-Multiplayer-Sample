@@ -90,3 +90,4 @@ Mỗi player cần request 1 **Access Token** từ Authentication Service, **Acc
 - <a href = "https://docs-multiplayer.unity3d.com/">Unity Multiplayer documents</a> - Unity
 - <a href = "https://www.linkedin.com/pulse/multiplayer-client-side-prediction-server-demystified-zack-sinisi-p2efe/">Multiplayer Client-side Prediction and Server Reconciliation Demystified</a> - Zack Sinisi
 - <a href = "https://docs-multiplayer.unity3d.com/netcode/current/advanced-topics/message-system/rpc/">RPC</a> - Unity
+- [Unity Multiplayer Solutions](https://docs.google.com/spreadsheets/d/1Bj5uLdnxZYlJykBg3Qd9BNOtvE8sp1ZQ4EgX1sI0RFA/edit?gid=127892449#gid=127892449)
